@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 
 from django.utils.deprecation import MiddlewareMixin
 from django.db.models.query import QuerySet
@@ -16,6 +17,7 @@ class UserActionsLogging(MiddlewareMixin):
         # Call the view function
         response = self.get_response(request)
 
+        t1 = datetime.now()
 
         logger.info(response.headers)
 
@@ -33,5 +35,9 @@ class UserActionsLogging(MiddlewareMixin):
                 # It's a single object, log the object's representation
                 logger.info(f'user session ======= {request.session.session_key}')
                 logger.info(f'Single Data loaded ====== {request.queryset}')
+
+        t2 = datetime.now()
+
+        print(f"Elapsed time ====== {t2-t1}")
 
         return response
